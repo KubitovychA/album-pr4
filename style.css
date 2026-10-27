@@ -1,0 +1,120 @@
+/* Локальний шрифт заголовків (fonts/) */
+@font-face {
+  font-family: 'DejaVu Serif';
+  src: url('fonts/DejaVuSerif-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+:root {
+  --bg:#0f0f1a; --panel:#1a1a2e; --text:#f1f1f6; --muted:#9a9ab0; --accent:#ff4d8d;
+  --line:#2d2d4a; --hover:#26264a;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'DejaVu Serif', Georgia, 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+/* Світла тема: перемикається класом .light на <body> */
+.light { --bg:#f4f4fa; --panel:#ffffff; --text:#1a1a2e; --muted:#5c5c75; --line:#dcdcea; --hover:#ffe8f0; }
+
+* { box-sizing: border-box; margin: 0; }
+body { font-family: var(--font-body); line-height: 1.6; background: var(--bg); color: var(--text);
+       transition: background .3s, color .3s; }
+h1, h2, h3 { font-family: var(--font-heading); line-height: 1.25; font-weight: 700; }
+h1 { font-size: 1.25rem; } h2 { font-size: 1.4rem; } h3 { margin: 1rem 0 .5rem; }
+
+/* CSS Grid */
+.page {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    "header header"
+    "cover  tracks"
+    "cover  feedback"
+    "player player";
+  gap: 1rem; min-height: 100vh; padding: 1rem;
+}
+.header { grid-area: header; display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.cover { grid-area: cover; }
+.tracks { grid-area: tracks; overflow-x: auto; }
+.feedback { grid-area: feedback; }
+.player { grid-area: player; position: sticky; bottom: 1rem; border: 1px solid var(--line); }
+.cover, .tracks, .feedback, .player { background: var(--panel); border-radius: 12px; padding: 1rem; }
+
+.cover img { width: 100%; height: auto; border-radius: 8px; display: block; transition: transform .4s ease; }
+.cover img:hover { transform: scale(1.04); }
+.cover h2 { margin-top: .75rem; }
+.meta { color: var(--muted); }
+.desc { margin: .5rem 0 1rem; }
+
+/* Таблиця */
+table { width: 100%; border-collapse: collapse; }
+caption { text-align: left; font-weight: 700; padding-bottom: .5rem; }
+th, td { padding: .6rem; text-align: left; border-bottom: 1px solid var(--line); }
+thead th { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; }
+tfoot td { color: var(--muted); }
+.time { font-family: var(--font-mono); }
+tbody tr { transition: background .25s, color .25s; animation: fade-in .6s ease both; }
+tbody tr:nth-child(2) { animation-delay: .1s; } tbody tr:nth-child(3) { animation-delay: .2s; }
+tbody tr:nth-child(4) { animation-delay: .3s; } tbody tr:nth-child(5) { animation-delay: .4s; }
+tbody tr:nth-child(6) { animation-delay: .5s; }
+tbody tr:hover, tbody tr.active { background: var(--hover); color: var(--accent); }
+
+.play-btn { background: var(--accent); border: 0; border-radius: 50%; width: 36px; height: 36px;
+            display: grid; place-items: center; cursor: pointer; color: #fff; transition: transform .2s, background .2s; }
+.play-btn:hover, .play-btn:focus-visible { transform: scale(1.15); background: #ff2a75; }
+.active .play-btn { animation: pulse 1.4s infinite; }
+.player p { margin-bottom: .4rem; color: var(--muted); }
+audio { width: 100%; }
+
+/* Навігація, кнопки, бейджі */
+.nav { margin-left: auto; display: flex; gap: 1.25rem; }
+.nav a, .btn, .badge { text-transform: uppercase; font-weight: 600; }
+.nav a { color: var(--muted); text-decoration: none; font-size: .85rem; letter-spacing: 1.5px; transition: color .25s; }
+.nav a:hover, .nav a:focus-visible { color: var(--accent); }
+.badge { display: inline-block; font-size: .7rem; letter-spacing: 1px; padding: .2rem .6rem;
+         border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); }
+.btn { display: inline-block; padding: .6rem 1.4rem; background: var(--accent); color: #fff; border: 0; border-radius: 8px;
+       font-family: inherit; font-size: .85rem; letter-spacing: 1.2px; text-decoration: none; cursor: pointer;
+       transition: background .25s, transform .2s; }
+.btn:hover, .btn:focus-visible { background: #ff2a75; transform: translateY(-2px); }
+.ghost-btn { display: inline-flex; align-items: center; gap: .4rem; font-family: inherit; font-weight: 600;
+             font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text);
+             background: transparent; border: 1px solid var(--line); border-radius: 8px;
+             padding: .45rem .9rem; cursor: pointer; transition: border-color .25s, color .25s; }
+.ghost-btn:hover, .ghost-btn:focus-visible { border-color: var(--accent); color: var(--accent); }
+.actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; }
+.like-btn svg { fill: none; stroke: currentColor; stroke-width: 2; transition: transform .2s; }
+.like-btn.liked { color: var(--accent); border-color: var(--accent); }
+.like-btn.liked svg { fill: var(--accent); transform: scale(1.2); }
+
+/* Форма відгуків */
+.field { display: flex; flex-direction: column; gap: .25rem; margin-bottom: .75rem; max-width: 480px; }
+label { font-weight: 600; font-size: .9rem; }
+input, textarea { font-family: inherit; font-size: 1rem; padding: .5rem .7rem; color: var(--text);
+                  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field.invalid input, .field.invalid textarea { border-color: #ff6b6b; }
+.error { color: #ff6b6b; font-size: .85rem; min-height: 1.2em; }
+.hint { color: var(--muted); font-size: .8rem; }
+.reviews { list-style: none; padding: 0; display: grid; gap: .75rem; }
+.reviews li { background: var(--bg); border-left: 3px solid var(--accent); border-radius: 8px;
+              padding: .6rem .9rem; animation: fade-in .5s ease both; }
+.reviews time { color: var(--muted); font-size: .8rem; margin-left: .5rem; }
+
+/* Модальне вікно та кнопка "Нагору" */
+.modal { position: fixed; inset: 0; display: none; place-items: center; background: rgba(0,0,0,.6); z-index: 20; }
+.modal.open { display: grid; animation: fade-in .25s ease both; }
+.modal-box { background: var(--panel); padding: 1.5rem; border-radius: 12px; width: min(92vw, 420px); display: grid; gap: .75rem; }
+.to-top { position: fixed; right: 1rem; bottom: 6.5rem; width: 44px; height: 44px; border-radius: 50%; border: 0;
+          background: var(--accent); color: #fff; font-size: 1.2rem; cursor: pointer;
+          opacity: 0; pointer-events: none; transition: opacity .3s; }
+.to-top.visible { opacity: 1; pointer-events: auto; }
+
+@keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,77,141,.7); } 70% { box-shadow: 0 0 0 12px rgba(255,77,141,0); } 100% { box-shadow: 0 0 0 0 rgba(255,77,141,0); } }
+
+@media (max-width: 700px) {
+  .page { grid-template-columns: 1fr; grid-template-areas: "header" "cover" "tracks" "feedback" "player"; }
+  .nav { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
